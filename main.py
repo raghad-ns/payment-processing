@@ -1,5 +1,14 @@
 from abc import ABC,abstractmethod
-# Assume
+
+# Logger class, using singleton design pattern
+class Logger:
+    def __new__(self):
+        if not hasattr(self, 'instance'):
+            self.instance = super(Logger, self).__new__(self)
+        return self.instance
+    
+    def log(self, message):
+        print(message)
 
 # Payment interface
 class Payment(ABC):
@@ -16,6 +25,9 @@ class Validation(ABC):
 class Cridit_card_payment(Payment, Validation):
     def process_payment (self, order):
         if (self.validate_payment()):
+            logger = Logger()
+            # print(logger) # This will print the logger instance
+            logger.log("payment proceeded by cridit card!")
             return order.total_price * 1.02
     
     def validate_payment(self):
@@ -25,6 +37,9 @@ class Cridit_card_payment(Payment, Validation):
 class Paypal_payment(Payment, Validation):
     def process_payment (self, order):
         if (self.validate_payment()):
+            logger = Logger()
+            # print(logger) # This will print the logger instance
+            logger.log("payment proceeded by paypal!")
             return order.total_price + 5
     
     def validate_payment(self):
@@ -34,6 +49,10 @@ class Paypal_payment(Payment, Validation):
 class Cryptocurrency_payment(Payment, Validation):
     def process_payment(self, order):
         if (self.validate_payment()):
+            logger = Logger()
+            # print(logger)   # This will print the logger instance
+
+            logger.log("payment proceeded by crypto currency!")
             return order.total_price * 1.1
     
     def validate_payment(self):
@@ -75,5 +94,7 @@ class Order:
 
 order = Order(['Apple', 'Banana', 'Tomato'], 100, Cryptocurrency_payment(), Percentage_based_discount(0.5))
 order.apply_discount()
+order.process_payment()
+order = Order(['Apple', 'Banana', 'Tomato'], 100, Paypal_payment(), Percentage_based_discount(0.5))
 order.process_payment()
 print(order.total_price)
