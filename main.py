@@ -1,83 +1,10 @@
 from abc import ABC,abstractmethod
+from Logger import Logger
+from discounts.discount_strategies.Percentage_based_discount import Percentage_based_discount
+from payment.payment_stratigies.Cryptocurrency_payment import Cryptocurrency_payment
+from payment.payment_stratigies.Paypal_payment import Paypal_payment 
 
-# Logger class, using singleton design pattern
-class Logger:
-    def __new__(self):
-        if not hasattr(self, 'instance'):
-            self.instance = super(Logger, self).__new__(self)
-        return self.instance
-    
-    def log(self, message):
-        print(message)
 
-# Payment interface
-class Payment(ABC):
-    @abstractmethod
-    def process_payment(self, order):
-        pass
-
-# Validation interface
-class Validation(ABC):
-    @abstractmethod
-    def validate_payment(self):
-        pass
-
-class Cridit_card_payment(Payment, Validation):
-    def process_payment (self, order):
-        if (self.validate_payment()):
-            logger = Logger()
-            # print(logger) # This will print the logger instance
-            logger.log("payment proceeded by cridit card!")
-            return order.total_price * 1.02
-    
-    def validate_payment(self):
-        # Assuming valid payment
-        return True
-
-class Paypal_payment(Payment, Validation):
-    def process_payment (self, order):
-        if (self.validate_payment()):
-            logger = Logger()
-            # print(logger) # This will print the logger instance
-            logger.log("payment proceeded by paypal!")
-            return order.total_price + 5
-    
-    def validate_payment(self):
-        # Assuming valid payment
-        return True
-
-class Cryptocurrency_payment(Payment, Validation):
-    def process_payment(self, order):
-        if (self.validate_payment()):
-            logger = Logger()
-            # print(logger)   # This will print the logger instance
-
-            logger.log("payment proceeded by crypto currency!")
-            return order.total_price * 1.1
-    
-    def validate_payment(self):
-        # Assuming valid payment
-        return True
-
-# Discount interface
-class Discount(ABC):
-    @abstractmethod
-    def calculate_discount(self, order):
-        pass
-
-class Percentage_based_discount(Discount):
-    def __init__(self, discount_percentage) :
-        self.discount_percentage = discount_percentage
-
-    def calculate_discount(self, order):
-        return order.price * self.discount_percentage
-
-class Fixed_amount_discount(Discount):
-    def __init__(self, discount_amount) :
-        self.discount_amount = discount_amount
-
-    def calculate_discount(self, order):
-        return self.discount_amount
 class Order:
     def __init__(self, items, price, payment_method, discount_strategy):
         self.payment_method = payment_method
