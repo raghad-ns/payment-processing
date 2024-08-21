@@ -1,4 +1,5 @@
 # Logger class, using singleton design pattern
+# only one instance will be initiated from this class
 class Logger:
     def __new__(self):
         if not hasattr(self, 'instance'):
