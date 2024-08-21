@@ -1,10 +1,11 @@
 
 class Order:
-    def __init__(self, items, price, payment_method, discount_strategy):
+    def __init__(self, items, price, payment_method, discount_strategy, currency="ILS"):
         self.payment_method = payment_method
         self.discount_strategy = discount_strategy
         self.price = price
         self.items = items
+        self.currency = currency
         self.total_price = price # initially it equals the initial price, without discounts or payment fees
     
     def process_payment(self):

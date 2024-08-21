@@ -1,5 +1,6 @@
 import unittest
 from order.Order import Order
+from currency.Currency import Currency
 from payment.payment_stratigies.Cryptocurrency_payment import Cryptocurrency_payment
 from discounts.discount_strategies.Percentage_based_discount import Percentage_based_discount
 
@@ -20,6 +21,14 @@ class Test(unittest.TestCase):
         order.apply_discount()
         order.process_payment()
         self.assertEqual(int(order.total_price), 55)
+
+    def test_payment_with_currency_conversion(self):
+        order = Order(['Apple', 'Banana', 'Tomato'], 373, Cryptocurrency_payment(), Percentage_based_discount(0.5), "USD")
+        Currency.convert_currency(order)
+        self.assertEqual(int(order.total_price), 100)
+        order.process_payment()
+        self.assertEqual(int(order.total_price), 110)
+
 
 
 if __name__ == '__main__':
